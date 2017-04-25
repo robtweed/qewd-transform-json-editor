@@ -87,7 +87,7 @@ to reference. You'll see a *Get Path* option:
 Click this to copy the path to the editor's clipboard.
 
 - in the template object editor panel, go into Tree mode and click on the box next to the node
-against which you want to use the path.  You'll see a *Set Path* option:
+against which you want to use the path.  You'll see an *Add Path* option:
 
 
 ![setpath option](https://s3.amazonaws.com/mgateway/qewd/json_editor/set_path.png)
