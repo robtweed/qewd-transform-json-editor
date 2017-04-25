@@ -1,0 +1,87 @@
+{
+  "resourceType": "Bundle",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns='http://www.w3.org/1999/xhtml'>0000000000234<a name='mm'/></div>"
+        },
+        "id": "cf-1490550608517",
+        "patient": {
+          "reference": "Patient/14612"
+        },
+        "clinicalStatus": "active",
+        "verificationStatus": "confirmed",
+        "category": [
+          "medication"
+        ],
+        "substance": {
+          "text": "{{cause}}",
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "373270004"
+            }
+          ]
+        },
+        "assertedDate": "2017-03-26T18:53:20+01:00",
+        "recorder": {
+          "reference": "{{author}}"
+        },
+        "reaction": [
+          {
+            "manifestation": [
+              {
+                "text": "{{reaction}}",
+                "coding": [
+                  {
+                    "system": "http://snomed.info/sct",
+                    "code": "1806006"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "note": [
+          {
+            "text": "Not clear if this was a true allergy",
+            "time": "2017-03-26T18:54:22+01:00"
+          }
+        ]
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "14612",
+        "meta": {
+          "versionId": "3",
+          "lastUpdated": "2017-03-14T12:28:44.991-04:00"
+        },
+        "text": {
+          "status": "generated",
+          "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><div class=\"hapiHeaderText\">John M <b>SMITH </b></div><table class=\"hapiPropertyTable\"><tbody><tr><td>Identifier</td><td>12345</td></tr><tr><td>Address</td><td><span>1234 Any Street </span><br/><span>Menlo Park </span><span>California </span></td></tr><tr><td>Date of birth</td><td><span>14 April 1973</span></td></tr></tbody></table></div>"
+        },
+        "identifier": [
+          {
+            "system": "uk/nhs.number",
+            "value": "12345"
+          }
+        ],
+        "name": [
+          {
+            "family": "Cox",
+            "given": [
+              "Ivor"
+            ]
+          }
+        ],
+        "gender": "male",
+        "birthDate": "1973-04-14"
+      }
+    }
+  ]
+}

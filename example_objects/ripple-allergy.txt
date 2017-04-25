@@ -1,0 +1,11 @@
+{
+  "sourceId": "d2e7d38a-33c1-4cfb-a498-9df2d6ea049d",
+  "source": "EtherCIS",
+  "cause": "allergy to penicillin",
+  "causeCode": "SNOMED-CT",
+  "causeTerminology": 91936005,
+  "terminologyCode": "SNOMED-CT",
+  "reaction": "eruption due to drug",
+  "author": "Dr Ian Shannon",
+  "dateCreated": 1482207062000
+}

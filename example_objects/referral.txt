@@ -1,0 +1,177 @@
+{
+    "referral": {
+        "_uid": "2160a4bf-c9c3-4669-a62f-26dd8748ffcb::ripple_osi.ehrscape.c4h::1",
+        "language|code": "en",
+        "language|terminology": "ISO_639-1",
+        "territory|code": "GB",
+        "territory|terminology": "ISO_3166-1",
+        "context": {
+            "_health_care_facility|id": "012121",
+            "_health_care_facility|id_scheme": "iEHR",
+            "_health_care_facility|id_namespace": "iEHR",
+            "_health_care_facility|name": "The Medical Centre",
+            "start_time": "2016-01-14T00:00:00Z",
+            "setting|code": "238",
+            "setting|value": "other care",
+            "setting|terminology": "openehr"
+        },
+        "referral_details": {
+            "service_request": {
+                "_uid": "f940e9e7-4fcb-4af0-af9c-8b7540cf34bc",
+                "request": [{
+                    "referral_type": "General",
+                    "comments": "General",
+                    "reason_for_referral": "Septoplasty ",
+                    "interpreter_details": {
+                        "interpreter_required": {}
+                    },
+                    "timing": "Boilerplate timing string",
+                    "timing|formalism": "timing"
+                }],
+                "referral_control_number": "REF20160114104549012121",
+                "referring_provider": {
+                    "name_of_organisation": "The Medical Centre",
+                    "identifier": [{}]
+                },
+                "referred_to_provider": {
+                    "name_of_organisation": "15 Beecher Street",
+                    "identifier": [{}]
+                },
+                "distribution": {
+                    "individual_recipient": {
+                        "gp": {
+                            "name_of_organisation": "The Medical Centre",
+                            "wpn": {
+                                "work_number": "022 21551"
+                            }
+                        }
+                    }
+                },
+                "narrative": "General",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            },
+            "referral_status": {
+                "ism_transition": {
+                    "current_state|code": "526",
+                    "current_state|value": "planned",
+                    "current_state|terminology": "openehr",
+                    "careflow_step|code": "at0002",
+                    "careflow_step|value": "Referral planned",
+                    "careflow_step|terminology": "local"
+                },
+                "referral_type": "General",
+                "time": "2016-01-14T00:00:00Z",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }
+        },
+        "history_of_present_illness": {
+            "story_history": {
+                "history_of_present_illness": "Breathing difficulties. Reduced airflow through one side of nose",
+                "time": "2016-01-14T00:00:00Z",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            },
+            "hospital_attendances_summary": {
+                "previous_attendances": true,
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }
+        },
+        "history_of_surgical_procedures": {
+            "procedure": [{
+                "ism_transition": {
+                    "current_state|code": "532",
+                    "current_state|value": "completed",
+                    "current_state|terminology": "openehr"
+                },
+                "history_of_surgical_procedure": "Appendectomy, 2001",
+                "time": "2016-01-14T00:00:00Z",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }]
+        },
+        "social_context": {
+            "history_of_tobacco_use": {
+                "smoking_details": [{
+                    "history_of_tobacco_use": "Non smoker"
+                }],
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            },
+            "history_of_alcohol_use": {
+                "history_of_alcohol_use": "Yes",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            },
+            "physical_mobility_impairment": {
+                "physical_mobility_impairment": "No",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }
+        },
+        "history_of_past_illness": {
+            "problem_diagnosis": [{
+                "history_of_past_illness": "Hypertension",
+                "date_time_clinically_recognised": "2016-01-14T00:00:00Z",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }]
+        },
+        "examination_findings": {
+            "physical_examination_findings": {
+                "description": "Deviated nasal septum.",
+                "time": "2016-01-14T00:00:00Z",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }
+        },
+        "medication_and_medical_devices": {
+            "medication_order": [{
+                "_uid": "128f1858-ec49-468e-90df-ccd5139ffda4",
+                "order": {
+                    "medication_item": "Bendroflumethiazide, 5mg daily.",
+                    "course_details": {
+                        "order_start_date_time": "2016-01-14T00:00:00Z"
+                    },
+                    "timing": "Boilerplate timing",
+                    "timing|formalism": "timing"
+                },
+                "narrative": "Bendroflumethiazide, 5mg daily.",
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }],
+            "anticoagulation_use": {
+                "anticoagulation_use": {},
+                "language|code": "en",
+                "language|terminology": "ISO_639-1",
+                "encoding|code": "UTF-8",
+                "encoding|terminology": "IANA_character-sets"
+            }
+        },
+        "composer|name": "TEST, HPM"
+    }
+}

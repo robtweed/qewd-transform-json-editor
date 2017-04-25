@@ -1,0 +1,32 @@
+@import url("jsoneditor.css");
+@import url("codemirror.css");
+
+      .modal-container {
+        position: relative
+      }
+      .modal-container .modal, .modal-container .modal-backdrop {
+        position: absolute
+      }
+      .hidden {
+        display: none
+      }
+      .overviewTable {
+        font-size: 12
+      }
+      .pushRight {
+        text-align: right
+      }
+      .btnAlign {
+        padding-top: 3px;
+        padding-bottom: 4px;
+      }
+      .inputGroupButton {
+        font-size: 14px;
+      }
+      .popover {
+        max-width: 400px;
+      }
+
+      .popoverField {
+        width: 100px;
+      }
