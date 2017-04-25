@@ -68,19 +68,30 @@ in JSON format - ie property names and string values must be double-quoted.
 
 The JSON editor panels are based on the [jsoneditor module.](https://github.com/josdejong/jsoneditor)
 
-![Here's a typical example](https://s3.amazonaws.com/mgateway/qewd/json_editor/overview.png)
+Here's a typical example:
+
+![typical example](https://s3.amazonaws.com/mgateway/qewd/json_editor/overview.png)
+
 
 Transformations are defined in the template object by "dot syntax" references to paths within the 
 input object.  The editor simplifies the process of figuring these paths out and entering them
 into the template object by providing you with some additional jsoneditor menu options:
 
 - in the input object editor panel, go into Tree mode and click on the box next to the node you want 
-to reference.  ![You'll see a *Get Path* option.](https://s3.amazonaws.com/mgateway/qewd/json_editor/get_path.png)
+to reference. You'll see a *Get Path* option:
+
+
+![getpath option](https://s3.amazonaws.com/mgateway/qewd/json_editor/get_path.png)
+
 
 Click this to copy the path to the editor's clipboard.
 
 - in the template object editor panel, go into Tree mode and click on the box next to the node
-against which you want to use the path.  ![You'll see a *Set Path* option.](https://s3.amazonaws.com/mgateway/qewd/json_editor/set_path.png)
+against which you want to use the path.  You'll see a *Set Path* option:
+
+
+![setpath option](https://s3.amazonaws.com/mgateway/qewd/json_editor/set_path.png)
+
 
 Click this and the path in the editor's clipboard will be pasted in as the JSON node's value.
 
