@@ -101,6 +101,92 @@ your input object, and you'll see the resulting output object appear in the righ
 Once you're happy with the results, copy and paste your template object from the middle panel (select *Text* mode
 first) and save it as a file on your computer.
 
+## Defining Transformation Functions
+
+In addition to mapping an input object's properties to a node in an output 
+object, the *qewd-transform-json* module allows you to do more complex transformations using
+*helper functions*. These are described in the 
+[qewd-transform-json README file](https://github.com/robtweed/qewd-transform-json).
+
+You can use the editor to develop and/or test these functions:
+
+First, click the *Function* button in the header banner of the Template Object Editor Panel.  A modal
+window will appear with 3 options:
+
+- a button that allows you to paste/edit an object containing all your helper functions in one go
+- a form field that allows you to enter a new helper function
+- a select widget that allows you to select one of your helper functions to edit
+
+Using any of these will bring up a code entry panel in the modal popup.
+
+If you use the *Add Helper Function Object* button, paste in an object that contains your functions, eg:
+
+        {
+          now: function() {
+            return new Date().getTime();
+          },
+          then: function() {
+            return 'then';
+          },
+          getAuthor: function(input) {
+            return 'Author is ' + input;
+          }
+        }
+
+If you use the *Create a new Function* field, an empty function template will appear:
+
+        function (input) {
+        }
+
+Fill out the function's logic as required.  Note that your function may have as many inputs as
+needed.
+
+If you use the *Select* option, the code for the selected function will appear - edit it as required.
+
+### Using Functions in your Transform Template Object
+
+This is described in detail in the 
+[qewd-transform-json README file](https://github.com/robtweed/qewd-transform-json).  If you're using
+the editor, you can either manually type in a function reference within your Template object, eg:
+
+       {
+         "author": "=> getAuthor(foo.author)"
+       }
+
+
+or you can use the drop-down menus in the editor panels:
+
+First select the path you need from the Input Object
+
+![function get path](https://s3.amazonaws.com/mgateway/qewd/json_editor/function_getPath.png)
+
+Now, in the Template Object editor panel, go into Tree mode, add/select the node you want to use
+and bring up the pop-up menu.  You'll see the Add Function option at the bottom of the list:
+
+![addfunction option](https://s3.amazonaws.com/mgateway/qewd/json_editor/add_function.png)
+
+Click the Add Function option and enter the name of the helper function you want to use:
+
+![addfunction name](https://s3.amazonaws.com/mgateway/qewd/json_editor/add_function_name.png)
+
+Clicking the Add button will add the function reference to the Template Object, complete with 
+the path from the editor's clipboard:
+
+![addedfunction](https://s3.amazonaws.com/mgateway/qewd/json_editor/function_added.png)
+
+
+You can now test the helper function-based transformation by clicking the *Test Your Template*
+button, and view the results in the Example Output editor panel:
+
+![testfunction](https://s3.amazonaws.com/mgateway/qewd/json_editor/function_test.png)
+
+If, for some reason, the function is unable to be executed, you'll see an error in the
+Example Output object:
+
+![testfunction error](https://s3.amazonaws.com/mgateway/qewd/json_editor/function_test_error.png)
+
+
+
 ## License
 
  Copyright (c) 2017 M/Gateway Developments Ltd,                           
