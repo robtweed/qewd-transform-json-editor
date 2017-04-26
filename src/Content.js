@@ -55,6 +55,7 @@ var Content = React.createClass({
 
   render: function() {
 
+    //console.log('rendering Content - this.status = ' + this.status);
     //var componentPath = this.controller.updateComponentPath(this);
 
     if (this.status === 'initial') {
@@ -72,7 +73,7 @@ var Content = React.createClass({
       var self = this;
       this.navs.forEach(function(nav) {
 
-        console.log('Nav: ' + JSON.stringify(nav));
+        //console.log('Nav: ' + JSON.stringify(nav));
 
         hideByDefault = !nav.default;
         expanded = true;

@@ -57,7 +57,7 @@ var CodeModal = React.createClass({
   componentWillMount: function() {
     //this.controller = require('./controller-LoginModal')(this.props.controller, this);
 
-    this.modalTitle = 'Enter/Edit your Input XML';
+    this.modalTitle = 'Paste or Enter your Input XML';
     this.showSelect = true;
     this.showModal = this.props.show;
     this.code = '';
@@ -126,7 +126,6 @@ var CodeModal = React.createClass({
 
   render: function() {
 
-    console.log('CodeEditorModal rendering');
     //var componentPath = this.controller.updateComponentPath(this);
 
     var options = {

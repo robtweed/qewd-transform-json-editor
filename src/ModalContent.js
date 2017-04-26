@@ -61,7 +61,7 @@ var ModalContent = React.createClass({
     this.code = this.props.code;
 
     this.updateCode = function(newCode) {
-      console.log('updateCode');
+      //console.log('updateCode');
       self.code = newCode;
       self.setState({
         status: 'updatedCode'
@@ -80,36 +80,73 @@ var ModalContent = React.createClass({
       self.controller.emit('getFunction', obj);
     };
 
+    this.addFnObject = function() {
+      var code;
+      var helpers = '{';
+      var delim = '';
+      for (name in self.controller.helpers) {
+        helpers = helpers + delim + name + ': ' + self.controller.helpers[name].toString();
+        delim = ',';
+      }
+      helpers = helpers + '}';
+      //console.log('helpers = ' + helpers);
+      self.controller.emit('addFunctionObject', helpers);
+    };
+
     this.selectFunction = function(option) {
-      console.log('selectFunction');
-      self.selectedFunction = option;
-      self.setState({status: 'fnSelected'});
+      //console.log('selectFunction');
+      var fnName = option.value
+      self.selectedFunction = fnName;
 
-      self.props.controller.send({
-        type: 'getFunction',
-        params: {
-          name: option.value
-        }
-      });
-
+      if (self.controller.app.mode === 'local') {
+        var obj = {
+          message: {
+            name: fnName,
+            code: self.controller.helpers[fnName].toString()
+          }
+        };
+        self.controller.emit('getFunction', obj);
+      }
+      else {
+        self.setState({status: 'fnSelected'});
+        self.props.controller.send({
+          type: 'getFunction',
+          params: {
+            name: option.value
+          }
+        });
+      }
     };
 
     this.controller.formFieldHandler.call(this, 'ModalContent', 'functionName');
 
     this.getFunctions = function() {
-      this.controller.send({
-        type: 'getFunctions'
-      }, function(responseObj) {
-        self.theFunctions = [];
-        responseObj.message.forEach(function(fnName) {
-          self.theFunctions.push({
+      if (this.controller.app.mode === 'local') {
+        this.theFunctions = [];
+        for (var fnName in this.controller.helpers) {
+          this.theFunctions.push({
             value: fnName,
             label: fnName
           });
-          self.selectedFunction = '';
-          self.setState({status: 'hasFunctions'});
+        }
+        this.selectedFunction = '';
+        this.setState({status: 'hasFunctions'});
+      }
+      else {
+        this.controller.send({
+          type: 'getFunctions'
+        }, function(responseObj) {
+          self.theFunctions = [];
+          responseObj.message.forEach(function(fnName) {
+            self.theFunctions.push({
+              value: fnName,
+              label: fnName
+            });
+            self.selectedFunction = '';
+            self.setState({status: 'hasFunctions'});
+          });
         });
-      });
+      }
     };
 
     this.getFunctions();
@@ -137,7 +174,7 @@ var ModalContent = React.createClass({
 
   render: function() {
 
-    console.log('ModalContent rendering');
+    //console.log('ModalContent rendering');
 
     var options = {
       lineNumbers: true,
@@ -147,6 +184,16 @@ var ModalContent = React.createClass({
     if (this.showSelect) {
       return (
         <div>
+
+          <Button 
+            onClick={this.addFnObject}
+            bsStyle='primary'
+          >
+            Add Helper Function Object
+          </Button>
+
+          <h5>Or..</h5>
+
           <FormField
               placeholder='Function Name'
               fieldname='functionName'

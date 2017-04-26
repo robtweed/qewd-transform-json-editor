@@ -61,7 +61,7 @@ var Container = React.createClass({
     //var componentPath = this.controller.updateComponentPath(this);
     //console.log('OverviewContainer - this.hideContainer = ' + this.hideContainer);
 
-    console.log('Container props: ' + JSON.stringify(this.props));
+    //console.log('Container props: ' + JSON.stringify(this.props));
 
     return (
       <Grid

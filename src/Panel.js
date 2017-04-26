@@ -57,11 +57,11 @@ var Pane = React.createClass({
     );
 
     if (this.props.content) {
-      console.log('this.props.content exists');
+      //console.log('this.props.content exists');
       this.content = React.createElement(this.props.content, {controller: this.controller});
     }
     else {
-      console.log('this.props.content doesnt exist');
+      //console.log('this.props.content doesnt exist');
       this.content = (<div>No content defined</div>);
     }
 

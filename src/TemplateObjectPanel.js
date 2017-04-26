@@ -97,23 +97,43 @@ var TemplateObjectPanel = React.createClass({
       self.setState({status: 'editCode'});
     };
 
-    if (this.controller.app.mode === 'local') {
+    this.tooltip = (
+      <Tooltip id="tooltip">
+        Paste or enter your template JSON object instance into the editor panel
+        below. At any time you can try out your template against your input object
+        instance by clicking the <i>Test Your Template</i> button, and viewing the results
+        in the Example Output panel to the right.
+     </Tooltip>
+    );
+
+    if (this.controller.app.mode === 'xlocal') {
       this.templateHeader = (
         <span>
-            <b>Template Object</b>
+            <b>&nbsp;&nbsp;Template Object</b>
             <Button 
               bsClass="btn btn-success pull-right"
               onClick = {this.applyTemplate}
             >
               Test
             </Button>
+
+            <OverlayTrigger placement="bottom" overlay={this.tooltip}>
+              <Button 
+                bsClass="btn btn-warning pull-left"
+              >
+                <Glyphicon 
+                  glyph="question-sign"
+                />
+              </Button>
+            </OverlayTrigger>
+
         </span>
       );
     }
     else {
       this.templateHeader = (
         <span>
-            <b>Template Object</b>
+            <b>&nbsp;&nbsp;Template Object</b>
             <Button 
               bsClass="btn btn-primary pull-right"
               onClick = {this.applyTemplate}
@@ -126,6 +146,16 @@ var TemplateObjectPanel = React.createClass({
             >
               Function
             </Button>
+
+            <OverlayTrigger placement="bottom" overlay={this.tooltip}>
+              <Button 
+                bsClass="btn btn-warning pull-left"
+              >
+                <Glyphicon 
+                  glyph="question-sign"
+                />
+              </Button>
+            </OverlayTrigger>
         </span>
       );
     }
@@ -188,8 +218,11 @@ var TemplateObjectPanel = React.createClass({
         }
         else {
           if (eventType === 'addFunction') {
+            // JSON Editor 'add function' menu option was clicked
+
             console.log('** test - editor root = ' + node.editor.getName());
             self.showOverlay = true;
+            self.showCodeEditor = false;
             self.node = node;
             self.path = path;
             self.setState({status: 'showOverlay'});

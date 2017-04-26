@@ -37,6 +37,7 @@ var params = {
   log: true,
   config: {
     title: 'QEWD JSON Transformer',
+    
     loginModal: {
       title: 'Login',
       username: {
@@ -44,6 +45,7 @@ var params = {
         placeholder: 'Enter User Name'
       }
     },
+    
     shutdown: {
       buttonText: 'Restart'
     },
@@ -58,7 +60,7 @@ var params = {
         }
       } 
     ],
-    mode: 'localx'
+    mode: 'local'
   }
 };
 

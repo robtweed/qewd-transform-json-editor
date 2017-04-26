@@ -126,11 +126,19 @@ module.exports = function (controller, component) {
     controller.emit(eventKey);
   };
 
-  component.showLoginModal = true;
-
   controller.app = component.props.config || {};
   if (!controller.app.navs) controller.app.navs = component.navs;
   if (!controller.app.title) controller.app.title = 'Un-named Application';
+
+  if (controller.app.loginModal && controller.app.mode !== 'local') {
+    component.showLoginModal = true;
+  }
+  else {
+    component.showLoginModal = false;
+    component.setState({
+      status: 'loggedIn'
+    });
+  }
 
 
   return controller;

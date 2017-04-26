@@ -58,7 +58,7 @@ var MainPage = React.createClass({
 
   render: function() {
 
-     console.log('status = ' + this.state.status);
+     //console.log('status = ' + this.state.status);
 
      if (this.state.status === 'shutdown') {
        return (

@@ -76967,7 +76967,7 @@ module.exports = function (envObj, component, $, io) {
  |  limitations under the License.                                          |
  ----------------------------------------------------------------------------
 
-  17 January 2017
+  25 April 2017
 
 */
 
@@ -122484,8 +122484,10 @@ var CodeModal = React.createClass({
 
     this.modalTitle = 'Enter/Edit your JavaScript Function';
     this.showSelect = true;
+    this.addFunctionObject = false;
     this.showModal = this.props.show;
     this.code = '';
+    this.helperFunctionCode = '';
     this.fnName = '';
     this.controller = this.props.controller;
 
@@ -122497,44 +122499,87 @@ var CodeModal = React.createClass({
     };
 
     this.saveFunction = function () {
-      self.props.controller.send({
-        type: 'saveFunction',
-        params: {
-          name: self.fnName,
-          code: self.editor.getValue()
+      if (self.controller.app.mode === 'local') {
+        var code = self.editor.getValue();
+        if (self.addFunctionObject) {
+          try {
+            eval('self.controller.helpers = ' + code);
+            self.showModal = false;
+            self.setState({ status: 'functionSaved' });
+          } catch (err) {
+            self.controller.toastr('error', 'Unable to parse object: ' + err);
+          }
+        } else {
+          try {
+            eval('self.controller.helpers[self.fnName] = ' + code);
+            self.showModal = false;
+            self.setState({ status: 'functionSaved' });
+          } catch (err) {
+            self.controller.toastr('error', 'Invalid Function: ' + err);
+          }
         }
-      }, function (responseObj) {
-        if (!responseObj.message.error) {
-          self.showModal = false;
-          self.setState({ status: 'functionSaved' });
-        }
-      });
+      } else {
+        self.props.controller.send({
+          type: 'saveFunction',
+          params: {
+            name: self.fnName,
+            code: self.editor.getValue()
+          }
+        }, function (responseObj) {
+          if (!responseObj.message.error) {
+            self.showModal = false;
+            self.setState({ status: 'functionSaved' });
+          }
+        });
+      }
     };
 
     this.deleteFunction = function () {
-      self.props.controller.send({
-        type: 'deleteFunction',
-        params: {
-          name: self.fnName
+      if (self.controller.app.mode === 'local') {
+        if (self.addFunctionObject) {
+          delete self.controller.helpers;
+        } else {
+          delete self.controller.helpers[self.fnName];
         }
-      }, function (responseObj) {
-        if (!responseObj.message.error) {
-          self.showModal = true;
-          self.showSelect = true;
-          self.code = '';
-          self.modalTitle = 'Enter/Edit your JavaScript Function';
-          self.setState({ status: 'functionDeleted' });
-        }
-      });
+        self.showModal = true;
+        self.showSelect = true;
+        self.code = '';
+        self.modalTitle = 'Enter/Edit your JavaScript Function';
+        self.setState({ status: 'functionDeleted' });
+      } else {
+        self.props.controller.send({
+          type: 'deleteFunction',
+          params: {
+            name: self.fnName
+          }
+        }, function (responseObj) {
+          if (!responseObj.message.error) {
+            self.showModal = true;
+            self.showSelect = true;
+            self.code = '';
+            self.modalTitle = 'Enter/Edit your JavaScript Function';
+            self.setState({ status: 'functionDeleted' });
+          }
+        });
+      }
     };
 
     this.controller.on('editorRef', function (ref) {
       self.editor = ref;
     });
 
+    this.controller.on('addFunctionObject', function (code) {
+      self.showSelect = false;
+      self.addFunctionObject = true;
+      self.modalTitle = 'Paste/edit Helper Function Object';
+      self.code = code;
+      self.setState({ status: 'addFunctionObject' });
+    });
+
     this.controller.on('getFunction', function (responseObj) {
       if (!responseObj.error) {
         self.showSelect = false;
+        self.addFunctionObject = false;
         self.modalTitle = 'Edit function ' + responseObj.message.name;
         self.fnName = responseObj.message.name;
         self.code = responseObj.message.code;
@@ -122557,7 +122602,7 @@ var CodeModal = React.createClass({
 
   render: function render() {
 
-    console.log('CodeEditorModal rendering');
+    //console.log('CodeEditorModal rendering');
     //var componentPath = this.controller.updateComponentPath(this);
 
     var display = '';
@@ -122587,6 +122632,7 @@ var CodeModal = React.createClass({
         React.createElement(ModalContent, {
           controller: this.controller,
           showSelect: this.showSelect,
+          addFunctionObject: this.addFunctionObject,
           code: this.code,
           fnName: this.fnName
         })
@@ -122687,7 +122733,7 @@ var Container = React.createClass({
     //var componentPath = this.controller.updateComponentPath(this);
     //console.log('OverviewContainer - this.hideContainer = ' + this.hideContainer);
 
-    console.log('Container props: ' + JSON.stringify(this.props));
+    //console.log('Container props: ' + JSON.stringify(this.props));
 
     return React.createElement(
       Grid,
@@ -122774,7 +122820,7 @@ var Content = React.createClass({
 
   render: function render() {
 
-    console.log('rendering Content - this.status = ' + this.status);
+    //console.log('rendering Content - this.status = ' + this.status);
     //var componentPath = this.controller.updateComponentPath(this);
 
     if (this.status === 'initial') {
@@ -122789,7 +122835,7 @@ var Content = React.createClass({
       var self = this;
       this.navs.forEach(function (nav) {
 
-        console.log('Nav: ' + JSON.stringify(nav));
+        //console.log('Nav: ' + JSON.stringify(nav));
 
         hideByDefault = !nav.default;
         expanded = true;
@@ -122892,17 +122938,23 @@ var EditorPanel = React.createClass({
     if (this.controller.app.mode === 'local') transform = require('qewd-transform-json').transform;
 
     this.inputJSON = {};
+    this.controller.helpers = {};
 
     this.controller.on('inputJSON', function (json) {
       self.inputJSON = json;
-      console.log('inputJSON updated');
+      //console.log('inputJSON updated');
     });
 
     this.controller.on('applyTemplate', function (templateObj) {
-      console.log('** on applyTemplate');
+      //console.log('** on applyTemplate');
 
       if (self.controller.app.mode === 'local') {
-        self.resultEditor.set(transform(templateObj, self.inputJSON));
+        // clone the helpers so the object in controller doesn't get augmented by transform()
+        var helpers = {};
+        for (var name in self.controller.helpers) {
+          helpers[name] = self.controller.helpers[name];
+        }
+        self.resultEditor.set(transform(templateObj, self.inputJSON, helpers));
       } else {
         self.controller.send({
           type: 'testTemplate',
@@ -122911,7 +122963,6 @@ var EditorPanel = React.createClass({
             data: self.inputJSON
           }
         }, function (responseObj) {
-          console.log('response: ' + JSON.stringify(responseObj));
           self.resultEditor.set(responseObj.message);
         });
       }
@@ -123675,7 +123726,7 @@ var MainPage = React.createClass({
 
   render: function render() {
 
-    console.log('status = ' + this.state.status);
+    //console.log('status = ' + this.state.status);
 
     if (this.state.status === 'shutdown') {
       return React.createElement(Shutdown, {
@@ -123783,7 +123834,7 @@ var ModalContent = React.createClass({
     this.code = this.props.code;
 
     this.updateCode = function (newCode) {
-      console.log('updateCode');
+      //console.log('updateCode');
       self.code = newCode;
       self.setState({
         status: 'updatedCode'
@@ -123802,35 +123853,71 @@ var ModalContent = React.createClass({
       self.controller.emit('getFunction', obj);
     };
 
-    this.selectFunction = function (option) {
-      console.log('selectFunction');
-      self.selectedFunction = option;
-      self.setState({ status: 'fnSelected' });
+    this.addFnObject = function () {
+      var code;
+      var helpers = '{';
+      var delim = '';
+      for (name in self.controller.helpers) {
+        helpers = helpers + delim + name + ': ' + self.controller.helpers[name].toString();
+        delim = ',';
+      }
+      helpers = helpers + '}';
+      //console.log('helpers = ' + helpers);
+      self.controller.emit('addFunctionObject', helpers);
+    };
 
-      self.props.controller.send({
-        type: 'getFunction',
-        params: {
-          name: option.value
-        }
-      });
+    this.selectFunction = function (option) {
+      //console.log('selectFunction');
+      var fnName = option.value;
+      self.selectedFunction = fnName;
+
+      if (self.controller.app.mode === 'local') {
+        var obj = {
+          message: {
+            name: fnName,
+            code: self.controller.helpers[fnName].toString()
+          }
+        };
+        self.controller.emit('getFunction', obj);
+      } else {
+        self.setState({ status: 'fnSelected' });
+        self.props.controller.send({
+          type: 'getFunction',
+          params: {
+            name: option.value
+          }
+        });
+      }
     };
 
     this.controller.formFieldHandler.call(this, 'ModalContent', 'functionName');
 
     this.getFunctions = function () {
-      this.controller.send({
-        type: 'getFunctions'
-      }, function (responseObj) {
-        self.theFunctions = [];
-        responseObj.message.forEach(function (fnName) {
-          self.theFunctions.push({
+      if (this.controller.app.mode === 'local') {
+        this.theFunctions = [];
+        for (var fnName in this.controller.helpers) {
+          this.theFunctions.push({
             value: fnName,
             label: fnName
           });
-          self.selectedFunction = '';
-          self.setState({ status: 'hasFunctions' });
+        }
+        this.selectedFunction = '';
+        this.setState({ status: 'hasFunctions' });
+      } else {
+        this.controller.send({
+          type: 'getFunctions'
+        }, function (responseObj) {
+          self.theFunctions = [];
+          responseObj.message.forEach(function (fnName) {
+            self.theFunctions.push({
+              value: fnName,
+              label: fnName
+            });
+            self.selectedFunction = '';
+            self.setState({ status: 'hasFunctions' });
+          });
         });
-      });
+      }
     };
 
     this.getFunctions();
@@ -123857,7 +123944,7 @@ var ModalContent = React.createClass({
 
   render: function render() {
 
-    console.log('ModalContent rendering');
+    //console.log('ModalContent rendering');
 
     var options = {
       lineNumbers: true,
@@ -123868,6 +123955,19 @@ var ModalContent = React.createClass({
       return React.createElement(
         'div',
         null,
+        React.createElement(
+          Button,
+          {
+            onClick: this.addFnObject,
+            bsStyle: 'primary'
+          },
+          'Add Helper Function Object'
+        ),
+        React.createElement(
+          'h5',
+          null,
+          'Or..'
+        ),
         React.createElement(FormField, {
           placeholder: 'Function Name',
           fieldname: 'functionName',
@@ -124043,10 +124143,10 @@ var Pane = React.createClass({
     );
 
     if (this.props.content) {
-      console.log('this.props.content exists');
+      //console.log('this.props.content exists');
       this.content = React.createElement(this.props.content, { controller: this.controller });
     } else {
-      console.log('this.props.content doesnt exist');
+      //console.log('this.props.content doesnt exist');
       this.content = React.createElement(
         'div',
         null,
@@ -124283,7 +124383,7 @@ var TemplateObjectPanel = React.createClass({
       ' button, and viewing the results in the Example Output panel to the right.'
     );
 
-    if (this.controller.app.mode === 'local') {
+    if (this.controller.app.mode === 'xlocal') {
       this.templateHeader = React.createElement(
         'span',
         null,
@@ -124414,8 +124514,11 @@ var TemplateObjectPanel = React.createClass({
           }
         } else {
           if (eventType === 'addFunction') {
+            // JSON Editor 'add function' menu option was clicked
+
             console.log('** test - editor root = ' + node.editor.getName());
             self.showOverlay = true;
+            self.showCodeEditor = false;
             self.node = node;
             self.path = path;
             self.setState({ status: 'showOverlay' });
@@ -124610,7 +124713,6 @@ var CodeModal = React.createClass({
 
   render: function render() {
 
-    console.log('CodeEditorModal rendering');
     //var componentPath = this.controller.updateComponentPath(this);
 
     var options = {
@@ -124710,7 +124812,7 @@ var params = {
   log: true,
   config: {
     title: 'QEWD JSON Transformer',
-    /*
+
     loginModal: {
       title: 'Login',
       username: {
@@ -124718,7 +124820,7 @@ var params = {
         placeholder: 'Enter User Name'
       }
     },
-    */
+
     shutdown: {
       buttonText: 'Restart'
     },
@@ -125235,7 +125337,7 @@ module.exports = function (controller, component) {
   if (!controller.app.navs) controller.app.navs = component.navs;
   if (!controller.app.title) controller.app.title = 'Un-named Application';
 
-  if (controller.app.loginModal) {
+  if (controller.app.loginModal && controller.app.mode !== 'local') {
     component.showLoginModal = true;
   } else {
     component.showLoginModal = false;

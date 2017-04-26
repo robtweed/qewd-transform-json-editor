@@ -34,7 +34,7 @@ module.exports = function (controller, component) {
     component.status = newProps.status;
   };
 
-  component.status = 'initial';
+  component.status = component.props.status;
   component.navs = controller.app.navs;
 
   return controller;

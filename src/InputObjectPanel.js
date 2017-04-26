@@ -80,15 +80,35 @@ var inputObjectPanel = React.createClass({
 
     this.initialiseEditor = true;
 
+    this.tooltip = (
+      <Tooltip id="tooltip">
+        Paste or enter an example of an input JSON object instance into the editor panel
+        below. Alternatively, 
+        click the <i>Import XML</i> button, enter an XML document instance and 
+        have it converted to a corresponding input JSON document
+     </Tooltip>
+    );
+
     this.panelHeader = (
       <span>
-        <b>Example Input Object</b>
+        <b>&nbsp;&nbsp;Example Input Object</b>
         <Button 
-          bsClass="btn btn-success pull-right"
+          bsClass="btn btn-info pull-right"
           onClick = {this.importXML}
         >
         Import XML
         </Button>
+
+        <OverlayTrigger placement="bottom" overlay={this.tooltip}>
+          <Button 
+            bsClass="btn btn-warning pull-left"
+          >
+            <Glyphicon 
+              glyph="question-sign"
+            />
+          </Button>
+        </OverlayTrigger>
+
       </span>
     );
 

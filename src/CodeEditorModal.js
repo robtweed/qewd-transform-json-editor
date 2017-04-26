@@ -56,8 +56,10 @@ var CodeModal = React.createClass({
 
     this.modalTitle = 'Enter/Edit your JavaScript Function';
     this.showSelect = true;
+    this.addFunctionObject = false;
     this.showModal = this.props.show;
     this.code = '';
+    this.helperFunctionCode = '';
     this.fnName = '';
     this.controller = this.props.controller;
 
@@ -69,44 +71,93 @@ var CodeModal = React.createClass({
     };
 
     this.saveFunction = function() {
-      self.props.controller.send({
-        type: 'saveFunction',
-        params: {
-          name: self.fnName,
-          code: self.editor.getValue()
+      if (self.controller.app.mode === 'local') {
+        var code = self.editor.getValue();
+        if (self.addFunctionObject) {
+          try {
+            eval('self.controller.helpers = ' + code);
+            self.showModal = false;
+            self.setState({status: 'functionSaved'});
+          }
+          catch(err) {
+            self.controller.toastr('error', 'Unable to parse object: ' + err);
+          }
         }
-      }, function(responseObj) {
-        if (!responseObj.message.error) {
-          self.showModal = false;
-          self.setState({status: 'functionSaved'});
+        else {
+          try {
+            eval('self.controller.helpers[self.fnName] = ' + code);
+            self.showModal = false;
+            self.setState({status: 'functionSaved'});
+          }
+          catch(err) {
+            self.controller.toastr('error', 'Invalid Function: ' + err);
+          }
         }
-      });
+      }
+      else {
+        self.props.controller.send({
+          type: 'saveFunction',
+          params: {
+            name: self.fnName,
+            code: self.editor.getValue()
+          }
+        }, function(responseObj) {
+          if (!responseObj.message.error) {
+            self.showModal = false;
+            self.setState({status: 'functionSaved'});
+          }
+        });
+      }
     };
 
     this.deleteFunction = function() {
-      self.props.controller.send({
-        type: 'deleteFunction',
-        params: {
-          name: self.fnName
+      if (self.controller.app.mode === 'local') {
+        if (self.addFunctionObject) {
+          delete self.controller.helpers;
         }
-      }, function(responseObj) {
-        if (!responseObj.message.error) {
-          self.showModal = true;
-          self.showSelect = true;
-          self.code = '';
-          self.modalTitle = 'Enter/Edit your JavaScript Function';
-          self.setState({status: 'functionDeleted'});
+        else {
+          delete self.controller.helpers[self.fnName];
         }
-      });
+        self.showModal = true;
+        self.showSelect = true;
+        self.code = '';
+        self.modalTitle = 'Enter/Edit your JavaScript Function';
+        self.setState({status: 'functionDeleted'});
+      }
+      else {
+        self.props.controller.send({
+          type: 'deleteFunction',
+          params: {
+            name: self.fnName
+          }
+        }, function(responseObj) {
+          if (!responseObj.message.error) {
+            self.showModal = true;
+            self.showSelect = true;
+            self.code = '';
+            self.modalTitle = 'Enter/Edit your JavaScript Function';
+            self.setState({status: 'functionDeleted'});
+          }
+        });
+      }
     };
 
     this.controller.on('editorRef', function(ref) {
       self.editor = ref;
     });
 
+    this.controller.on('addFunctionObject', function(code) {
+      self.showSelect = false;
+      self.addFunctionObject = true;
+      self.modalTitle = 'Paste/edit Helper Function Object';
+      self.code = code;
+      self.setState({status: 'addFunctionObject'});
+    });
+
     this.controller.on('getFunction', function(responseObj) {
       if (!responseObj.error) {
         self.showSelect = false;
+        self.addFunctionObject = false;
         self.modalTitle = 'Edit function ' + responseObj.message.name;
         self.fnName = responseObj.message.name;
         self.code = responseObj.message.code;
@@ -130,7 +181,7 @@ var CodeModal = React.createClass({
 
   render: function() {
 
-    console.log('CodeEditorModal rendering');
+    //console.log('CodeEditorModal rendering');
     //var componentPath = this.controller.updateComponentPath(this);
 
     var display = '';
@@ -155,6 +206,7 @@ var CodeModal = React.createClass({
             <ModalContent
               controller = {this.controller}
               showSelect = {this.showSelect}
+              addFunctionObject = {this.addFunctionObject}
               code = {this.code}
               fnName = {this.fnName}
             />

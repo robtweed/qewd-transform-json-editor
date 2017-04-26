@@ -68,17 +68,23 @@ var EditorPanel = React.createClass({
     if (this.controller.app.mode === 'local') transform = require('qewd-transform-json').transform;
 
     this.inputJSON = {};
+    this.controller.helpers = {};
 
     this.controller.on('inputJSON', function(json) {
       self.inputJSON = json;
-      console.log('inputJSON updated');
+      //console.log('inputJSON updated');
     });
 
     this.controller.on('applyTemplate', function(templateObj) {
-      console.log('** on applyTemplate');
+      //console.log('** on applyTemplate');
 
       if (self.controller.app.mode === 'local') {
-        self.resultEditor.set(transform(templateObj, self.inputJSON));
+        // clone the helpers so the object in controller doesn't get augmented by transform()
+        var helpers = {};
+        for (var name in self.controller.helpers) {
+          helpers[name] = self.controller.helpers[name];
+        }
+        self.resultEditor.set(transform(templateObj, self.inputJSON, helpers));
       }
       else {
         self.controller.send({
@@ -88,7 +94,6 @@ var EditorPanel = React.createClass({
             data: self.inputJSON
           }
         }, function(responseObj) {
-          console.log('response: ' + JSON.stringify(responseObj));
           self.resultEditor.set(responseObj.message);
         });
       }
