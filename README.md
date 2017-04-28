@@ -26,10 +26,6 @@ For information on qewd-transform-json, see [https://github.com/robtweed/qewd-tr
 
 This version can be served up from any web server, or as local files.
 
-Note: the standalone version cannot process custom helper functions.  If you want to do this, you'll need to
-install and use the QEWD-based (server-side) version which, in turn, requires 
-[QEWD](https://github.com/robtweed/qewd) to be installed.
-
 The files for the standalone version can be found in the */standalone_version* folder of this repository
 
 It is started in a browser by loading the index.html page.
@@ -185,6 +181,52 @@ Example Output object:
 
 ![testfunction error](https://s3.amazonaws.com/mgateway/qewd/json_editor/function_test_error.png)
 
+
+### Domain-specific Standalone version of the Editor
+
+The repository also includes a special domain-specific, standalone version of the editor, specifically
+for use in Healthcare.  It includes an additional button in the Input Object editor panel's header,  
+denoted *Import HL7*.
+
+When clicked, a pop-up editor panel appears into which you can paste/edit an HL7 message, eg:
+
+       MSH|^~\&|LCS|LCA|LIS|TEST9999|199807311532||ORU^R01|3629|P|2.2
+       PID||0493575^^^2^ID 1|454721||DOE^JOHN^^^^|DOE^JOHN^^^^|19480203|M||B|254 MYSTREET AVE^^MYTOWN^OH^44123^USA||(216)123-4567|||M|NON|400003403~1129086|
+       ORC|NW|8642753100012^LIS|20809880170^LCS||||||19980727000000|||HAVILAND
+       OBR|1|8642753100012^LIS|20809880170^LCS|008342^UPPER RESPIRATORY CULTURE^L|||19980727175800||||||SS#634748641 CH14885 SRC:THROA SRC:PENI|19980727000000||||||20809880170||19980730041800||BN|F
+       OBX|1|ST|008342^UPPER RESPIRATORY CULTURE^L||FINALREPORT|||||N|F||| 19980729160500|BN
+       ORC|NW|8642753100012^LIS|20809880170^LCS||||||19980727000000|||HAVILAND
+       OBR|2|8642753100012^LIS|20809880170^LCS|997602^.^L|||19980727175800||||G|||19980727000000||||||20809880170||19980730041800|||F|997602|||008342
+       OBX|2|CE|997231^RESULT 1^L||M415|||||N|F|||19980729160500|BN
+       NTE|1|L|MORAXELLA (BRANHAMELLA) CATARRHALIS
+       NTE|2|L| HEAVY GROWTH
+       NTE|3|L| BETA LACTAMASE POSITIVE
+       OBX|3|CE|997232^RESULT 2^L||MR105|||||N|F|||19980729160500|BN
+       NTE|1|L|ROUTINE RESPIRATORY FLORA
+
+Enter the HL7 version number relevant for parsing the message: 2.3 is the default.
+
+The message is transformed into a JSON representation which appears in the *Example Input Object" editor.
+
+The JSON conversion makes use of the [*hl7-dictionary*](https://github.com/fernandojsg/hl7-dictionary) module.
+This dictionary contains meta-data for the following HL7 versions:
+
+- 2.1
+- 2.2
+- 2.3
+- 2.3.1
+- 2.4
+- 2.5
+- 2.6.1
+- 2.7
+- 2.7.1
+
+
+The HL7-enabled version of the editor can be served up from any web server, or as local files.
+
+The files for the standalone version can be found in the */standalone_hl7_version* folder of this repository
+
+It is started in a browser by loading the index.html page.
 
 
 ## License
