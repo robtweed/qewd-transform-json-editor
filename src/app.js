@@ -60,7 +60,8 @@ var params = {
         }
       } 
     ],
-    mode: 'local'
+    mode: 'local',
+    hl7: 'true'
   }
 };
 

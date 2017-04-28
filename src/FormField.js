@@ -65,7 +65,7 @@ var FormField = React.createClass({
 
   render: function() {
 
-    console.log('FormField rendering');
+    //console.log('FormField rendering');
     //console.log('Formfield props: ' + JSON.stringify(this.props));
     //this.controller.updateComponentPath(this);
 

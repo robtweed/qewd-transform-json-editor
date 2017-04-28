@@ -46,6 +46,7 @@ var {
 
 var jsonEditor = require('qewd-jsoneditor');
 var XMLEditorModal = require('./XMLEditorModal');
+var HL7EditorModal = require('./HL7EditorModal');
 
 var inputObjectPanel = React.createClass({
 
@@ -68,6 +69,7 @@ var inputObjectPanel = React.createClass({
 
     this.controller.on('importJSON', function(json) {
       self.showXMLEditor = false;
+      self.showHL7Editor = false;
       self.editor.set(json);
       self.controller.emit('inputJSON', json); // push to EditorPanel
       self.setState({status: 'importJSON'});
@@ -75,10 +77,20 @@ var inputObjectPanel = React.createClass({
 
     this.importXML = function() {
       self.showXMLEditor = true;
+      self.showHL7Editor = false;
       self.setState({status: 'editXML'});
     };
 
+    this.importHL7 = function() {
+      self.showXMLEditor = false;
+      self.showHL7Editor = true;
+      self.setState({status: 'editHL7'});
+    };
+
     this.initialiseEditor = true;
+    this.showXMLEditor = false;
+    this.initialiseHL7Editor = true;
+    this.showHL7Editor = false;
 
     this.tooltip = (
       <Tooltip id="tooltip">
@@ -111,6 +123,36 @@ var inputObjectPanel = React.createClass({
 
       </span>
     );
+
+    if (this.controller.app.hl7) {
+      this.panelHeader = (
+        <span>
+          <b>&nbsp;&nbsp;Example Input Object</b>
+          <Button 
+            bsClass="btn btn-info pull-right"
+            onClick = {this.importXML}
+          >
+          Import XML
+          </Button>
+          <Button 
+            bsClass="btn btn-info pull-right"
+            onClick = {this.importHL7}
+          >
+          Import HL7
+          </Button>
+ 
+          <OverlayTrigger placement="bottom" overlay={this.tooltip}>
+            <Button 
+              bsClass="btn btn-warning pull-left"
+            >
+              <Glyphicon 
+                glyph="question-sign"
+              />
+            </Button>
+          </OverlayTrigger>
+        </span>
+      );
+    }
 
   },
 
@@ -155,6 +197,12 @@ var inputObjectPanel = React.createClass({
         <XMLEditorModal
           show = {this.showXMLEditor}
           initialise = {this.initialiseEditor}
+          controller = {this.controller}
+        />
+
+        <HL7EditorModal
+          show = {this.showHL7Editor}
+          initialise = {this.initialiseHL7Editor}
           controller = {this.controller}
         />
 

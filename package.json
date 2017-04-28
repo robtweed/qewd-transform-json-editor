@@ -1,6 +1,6 @@
 {
   "name": "qewd-transform-json-editor",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "Editor for transforming JSON via a template",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,9 @@
     "url": "git+https://github.com/robtweed/qewd-transform-json-editor.git"
   },
   "dependencies": {
-    "traverse": ""
+    "qewd-transform-json": "",
+    "qewd-hl72json": "",
+    "xml2js": ""
   },
   "author": "Rob Tweed, M/Gateway Developments Ltd",
   "license": "Apache-2.0",
